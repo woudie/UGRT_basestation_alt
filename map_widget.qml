@@ -7,8 +7,8 @@ Rectangle {
     width: 560
     height: 480
     anchors {
-        topMargin: 10
-        leftMargin: 10
+        topMargin: 0
+        leftMargin: 0
     }
     Plugin {
         id: mapPlugin
@@ -24,13 +24,13 @@ Rectangle {
         }
     }
     Rectangle {
-        width: parent.width * 0.45
-        height: parent.height * 0.10
+        width: parent.width * 0.25
+        height: parent.height * 0.050
         anchors{
             top: mapArea.top
             left: mapArea.left
             topMargin: 8
-            leftMargin: 8
+            leftMargin: 9
         }
         border {
             color: "black"

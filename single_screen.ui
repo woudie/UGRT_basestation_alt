@@ -39,7 +39,7 @@
    <enum>Qt::LeftToRight</enum>
   </property>
   <property name="autoFillBackground">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: #ffffff</string>
@@ -51,11 +51,39 @@
    <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="mapBox" native="true">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>80</y>
+      <width>561</width>
+      <height>481</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>561</width>
+      <height>481</height>
+     </size>
+    </property>
+    <property name="toolTipDuration">
+     <number>-7</number>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid black;</string>
+    </property>
+   </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>30</y>
+      <x>590</x>
+      <y>80</y>
       <width>641</width>
       <height>480</height>
      </rect>
@@ -87,19 +115,6 @@
       <string>Arm Camera</string>
      </attribute>
     </widget>
-   </widget>
-   <widget class="QWidget" name="mapBox" native="true">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>30</y>
-      <width>561</width>
-      <height>481</height>
-     </rect>
-    </property>
-    <property name="toolTipDuration">
-     <number>-7</number>
-    </property>
    </widget>
   </widget>
  </widget>

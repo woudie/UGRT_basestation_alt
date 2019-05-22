@@ -1,3 +1,3 @@
-#  ugrt_basestation_alt
 #  UGRT Base Station Alternative
-#  UGRT_basestation_alt
+
+Currently Designed for single screen usage. After basic features are implemented, dual screen adaptation will be created.
