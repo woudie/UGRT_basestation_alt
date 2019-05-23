@@ -1,47 +1,54 @@
 import sys
-
-from PySide2 import QtCore, QtGui, QtUiTools, QtWidgets, QtWebEngineCore, QtWebEngineWidgets, QtQuickWidgets
+import os
+import signal
+import rospy
+import roslaunch
+from PySide2 import QtCore, QtGui, QtUiTools, QtWidgets, QtWebEngineCore, QtWebEngineWidgets, QtQuickWidgets, QtQuickWidgets
 from PySide2.QtWebEngineWidgets import QWebEngineSettings
 
 
+class Controller(QtWidgets.QMainWindow, QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        QtWidgets.QMainWindow.__init__(self)
 
-class Controller(QtWidgets.QMainWindow, QtWidgets.QVBoxLayout):
-  def __init__(self, parent=None):
-	QWebEngineSettings.globalSettings().setAttribute(QWebEngineSettings.PluginsEnabled, True)
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        QWebEngineSettings.globalSettings().setAttribute(QWebEngineSettings.PluginsEnabled, True)
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
-  def qmlLoader(self, qmlUrl):
-    tempLayout = QtWidgets.QVBoxLayout()
-    view = QtQuickWidgets.QQuickWidget()
-    view.setSource(QtCore.QUrl(qmlUrl))
-    tempLayout.addWidget(view)
-    return tempLayout
+        self.ui = self.initBaseStation("Ui/single_screen.ui")
 
-  def window_loader(self, uifilename, parent=None):
-  	loader = QtUiTools.QUiLoader()
-  	uifile = QtCore.QFile(uifilename)
-  	uifile.open(QtCore.QFile.ReadOnly)
-  	gui = loader.load(uifile, parent)
-  	uifile.close()
-	return gui
+        self.setWebVid(self.ui, self.ui.cam1, "http://192.168.0.31:4946/stream?topic=/cam1/image_raw&type=ros_compressed")
+        self.setWebVid(self.ui, self.ui.cam2, "http://192.168.0.31:4946/stream?topic=/cam2/image_raw&type=ros_compressed")
+        self.setWebVid(self.ui, self.ui.cam3, "http://192.168.0.31:4946/stream?topic=/cam3/image_raw&type=ros_compressed")
 
-  def setWebVid(self, ui, cam, camurl, parent=None):
-	camlayout = QtWidgets.QVBoxLayout()
-	ui.webview = QtWebEngineWidgets.QWebEngineView()
-	ui.webview.setUrl(QtCore.QUrl(camurl))
-	camlayout.addWidget(ui.webview)
-	cam.setLayout(camlayout)
-	return cam
+        self.ui.mapBox.setLayout(self.qmlLoader('Qml/map_widget.qml'))
+
+    def qmlLoader(self, qmlUrl):
+        tempLayout = QtWidgets.QVBoxLayout()
+        view = QtQuickWidgets.QQuickWidget()
+        view.setSource(QtCore.QUrl(qmlUrl))
+        tempLayout.addWidget(view)
+        return tempLayout
+
+    def initBaseStation(self, uiFilename, parent=None):
+        uiloader = QtUiTools.QUiLoader()
+        uiFile = QtCore.QFile(uiFilename)
+        uiFile.open(QtCore.QFile.ReadOnly)
+        gui = uiloader.load(uiFile, parent)
+        uiFile.close()
+        return gui
+
+    def setWebVid(self, ui, cam, camurl, parent=None):
+        camlayout = QtWidgets.QVBoxLayout()
+        ui.webview = QtWebEngineWidgets.QWebEngineView()
+        ui.webview.setUrl(QtCore.QUrl(camurl))
+        camlayout.addWidget(ui.webview)
+        cam.setLayout(camlayout)
+        return cam
+
 
 if __name__ == "__main__":
-  app = QtWidgets.QApplication(sys.argv)
-  MainWindow = Controller()
-  ui = MainWindow.window_loader("single_screen.ui")
-
-  cam1 = MainWindow.setWebVid(ui, ui.cam1, "http://192.168.0.31:4946/stream?topic=/cam1/image_raw&type=ros_compressed")
-  cam2 = MainWindow.setWebVid(ui, ui.cam2, "http://192.168.0.31:4946/stream?topic=/cam2/image_raw&type=ros_compressed")
-  cam3 = MainWindow.setWebVid(ui, ui.cam3, "http://192.168.0.31:4946/stream?topic=/cam3/image_raw&type=ros_compressed")
-
-  ui.mapBox.setLayout(MainWindow.qmlLoader('map_widget.qml'))
-  
-  ui.show()
-  sys.exit(app.exec_())
+    basestation = QtWidgets.QApplication(sys.argv)
+    basestationWindow = Controller()
+    basestationWindow.ui.show()
+    sys.exit(basestation.exec_())

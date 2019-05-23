@@ -2,26 +2,25 @@ import QtQuick 2.1
 import QtLocation 5.6
 import QtPositioning 5.6
 
+
+
 Rectangle {
     id: mapArea
     width: 560
     height: 480
-    anchors {
-        topMargin: 0
-        leftMargin: 0
-    }
+
     Plugin {
         id: mapPlugin
-        name: "esri"
+        name: "mapboxgl"
     }
+    
+    //latitude: 51.467852 longitude: -112.712256
+    property variant initLoc: QtPositioning.coordinate(43.5314187, -80.227686)
     Map {
         anchors.fill: parent
         plugin: mapPlugin
         zoomLevel: 14
-        center {
-            latitude: 51.467852
-            longitude: -112.712256
-        }
+        center: initLoc
     }
     Rectangle {
         width: parent.width * 0.25
